@@ -1,0 +1,7 @@
+whisper
+flask
+numpy
+librosa
+flask_cors
+os
+cors
