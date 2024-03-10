@@ -1,0 +1,6 @@
+Name: Ravi
+Text:  Hello, this is Ravi.
+Email: ravindrababu.pk@gmail.com
+Audio File Name: blob
+Sample rate: 48000
+Number of samples: 155520
