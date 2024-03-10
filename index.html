@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        button {
+            display: block;
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Loader styles */
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            margin: auto;
+            margin-top: 10px;
+            display: none; /* Initially hidden */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <form id="audioForm">
+        <input type="text" id="name" placeholder="Name">
+        <input type="email" id="email" placeholder="Email">
+        <button type="button" onclick="startRecording()">Start Recording</button>
+        <button type="button" onclick="stopRecording()">Stop Recording</button>
+        <button type="button" onclick="submitForm()">Submit</button>
+        <div class="loader" id="loader"></div> <!-- Loader element -->
+    </form>
+
+    <script>
+        let recorder;
+        let audioChunks = [];
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                recorder = new MediaRecorder(stream);
+                recorder.ondataavailable = e => {
+                    audioChunks.push(e.data);
+                };
+                recorder.start();
+            })
+            .catch(err => console.error('Error recording audio: ', err));
+        }
+
+        function stopRecording() {
+            if (recorder.state === 'recording') {
+                recorder.stop();
+            }
+        }
+
+        function submitForm() {
+            if (recorder && recorder.state === 'recording') {
+                alert('Please stop recording before submitting the form.');
+                return;
+            }
+        
+            var formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            var blob = new Blob(audioChunks, { type: 'audio/wav' });
+            formData.append('audioFile', blob);
+
+            // Show loader
+            document.getElementById('loader').style.display = 'block';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:5000/upload', true);
+
+            xhr.onload = function () {
+                // Hide loader
+                document.getElementById('loader').style.display = 'none';
+
+                if (xhr.status === 200) {
+                    console.log('Data sent successfully ', xhr.responseText);
+                    alert(xhr.responseText);
+                } else {
+                    console.error('Error occurred while sending data');
+                }
+            };
+
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>
