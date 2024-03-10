@@ -1,0 +1,7 @@
+Name: Sohum
+Text:  Hello, this is Sohamil.
+Email: Sohum@gmail.com
+Audio File Name: blob
+Sample rate: 48000
+Number of samples: 155520
+
