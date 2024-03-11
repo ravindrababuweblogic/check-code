@@ -1,3 +1,4 @@
+# enter your python code here
 import librosa
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -35,6 +36,7 @@ y_pred = classifier.predict(X_test)
 # Calculate accuracy
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
+
 # Determine if the two sound clips are spoken by the same person based on accuracy
 if accuracy > 0.5:
     print("The two sound clips are likely spoken by the same person.")
