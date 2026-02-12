@@ -42,3 +42,8 @@ if accuracy > 0.5:
     print("The two sound clips are likely spoken by the same person.")
 else:
     print("The two sound clips are likely spoken by different persons.")
+==============================================================
+
+
+
+print("raj" is )
